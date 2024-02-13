@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.box {
+    min-width: 100px;
+    background-color: grey;
+    border: 1px solid black;
+    padding: 4px;
+    text-align: center;
+    position: absolute;
+    cursor: move;
+}
+</style>
+</head>
+<body>
+
+<div id="box1" class="box" style="left: 50px; top: 50px;">you</div>
+<div id="box2" class="box" style="left: 200px; top: 100px;">axe</div>
+<div id="box3" class="box" style="left: 350px; top: 150px;">tree</div>
+
+<script>
+function dragElement(element) {
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+    element.onmousedown = dragMouseDown;
+    element.ontouchstart = dragMouseDown;
+
+    function dragMouseDown(e) {
+        e.preventDefault();
+        if (e.touches) {
+            pos3 = e.touches[0].clientX;
+            pos4 = e.touches[0].clientY;
+        } else {
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+        }
+        document.onmouseup = closeDragElement;
+        document.ontouchend = closeDragElement;
+        document.onmousemove = elementDrag;
+        document.ontouchmove = elementDrag;
+    }
+
+    function elementDrag(e) {
+        e.preventDefault();
+        if (e.touches) {
+            pos1 = pos3 - e.touches[0].clientX;
+            pos2 = pos4 - e.touches[0].clientY;
+            pos3 = e.touches[0].clientX;
+            pos4 = e.touches[0].clientY;
+        } else {
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+        }
+        element.style.top = (element.offsetTop - pos2) + "px";
+        element.style.left = (element.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+        document.onmouseup = null;
+        document.ontouchend = null;
+        document.onmousemove = null;
+        document.ontouchmove = null;
+    }
+}
+
+dragElement(document.getElementById("box1"));
+dragElement(document.getElementById("box2"));
+dragElement(document.getElementById("box3"));
+</script>
+
+</body>
+</html>
